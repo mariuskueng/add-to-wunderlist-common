@@ -32,6 +32,21 @@
 
         frame.onload = function () {
 
+          setTimeout(function ()  {
+
+            console.log('timeout');
+
+              // send any stored auth token
+              WL.storage.get('authToken').done(function (value) {
+
+                if (value) {
+
+                  value = 'token:' + value;
+                  frame.contentWindow.postMessage(value, '*');
+                }
+              });
+          }, 500);
+
           // deal with animations
           $('body').css({
 
@@ -93,7 +108,6 @@
 
         // only listen for events when iframe is present
         window.addEventListener('message', handleMessage, false);
-
       });
     }
   }
