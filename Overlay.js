@@ -19,100 +19,96 @@
 
     if (!existing) {
 
-      WL.buildUrl(postData).done(function (builtUrl) {
+      var frame = document.createElement('iframe');
 
-        var frame = document.createElement('iframe');
+      frame.allowtransparency = 'true';
+      frame.scrolling = 'no';
+      frame.id = overlayId;
+      frame.name = overlayId;
+      frame.style.cssText = WL.buildCss();
+      frame.src = WL.buildUrl(postData);
 
-        frame.allowtransparency = 'true';
-        frame.scrolling = 'no';
-        frame.id = overlayId;
-        frame.name = overlayId;
-        frame.style.cssText = WL.buildCss();
-        frame.src = builtUrl;
+      frame.onload = function () {
 
-        frame.onload = function () {
+        setTimeout(function ()  {
 
-          setTimeout(function ()  {
+          console.log('timeout');
 
-            console.log('timeout');
+            // send any stored auth token
+            WL.storage.get('authToken').done(function (value) {
 
-              // send any stored auth token
-              WL.storage.get('authToken').done(function (value) {
+              if (value) {
 
-                if (value) {
+                value = 'token:' + value;
+                frame.contentWindow.postMessage(value, '*');
+              }
+            });
+        }, 500);
 
-                  value = 'token:' + value;
-                  frame.contentWindow.postMessage(value, '*');
-                }
-              });
-          }, 500);
+        // deal with animations
+        $('body').css({
 
-          // deal with animations
-          $('body').css({
+          'overflow': 'hidden'
+        });
 
-            'overflow': 'hidden'
+        frame.style.opacity = 1;
+
+        setTimeout(function () {
+
+          frame.style.cssText = WL.buildCss({
+
+            'opacity': 1,
+            'transitionSpeed': 50
           });
+        }, 0);
+      };
 
-          frame.style.opacity = 1;
+      document.body.appendChild(frame);
+
+      var handleMessage = function handleMessage (ev) {
+
+        // split message into useful bits
+        // message should come in the format 'event:data'
+        var parts = ev.data.split(':');
+        var eventName = parts[0];
+        var eventData = parts[1];
+
+        // handle messages sent from iframe
+        if (eventName === 'close_wunderlist') {
+
+          frame.style.opacity = 0;
 
           setTimeout(function () {
 
-            frame.style.cssText = WL.buildCss({
+            frame.src = 'about:blank';
+            frame.onload = function () {
 
-              'opacity': 1,
-              'transitionSpeed': 50
-            });
-          }, 0);
-        };
+              $('body').css({
 
-        document.body.appendChild(frame);
+                'overflow': ''
+              });
 
-        var handleMessage = function handleMessage (ev) {
+              // cleanup event
+              window.removeEventListener('message', handleMessage, false);
+              frame.parentNode.removeChild(frame);
+              frame = null;
+            };
+          }, 500);
+        }
+        else if (eventName === 'userAuthorized') {
 
-          // split message into useful bits
-          // message should come in the format 'event:data'
-          var parts = ev.data.split(':');
-          var eventName = parts[0];
-          var eventData = parts[1];
+          // store user token in extension's storage for use on reopen
+          var token = eventData;
+          console.log(eventName, eventData);
+          WL.storage.set('authToken', token);
+        }
+      };
 
-          // handle messages sent from iframe
-          if (eventName === 'close_wunderlist') {
-
-            frame.style.opacity = 0;
-
-            setTimeout(function () {
-
-              frame.src = 'about:blank';
-              frame.onload = function () {
-
-                $('body').css({
-
-                  'overflow': ''
-                });
-
-                // cleanup event
-                window.removeEventListener('message', handleMessage, false);
-                frame.parentNode.removeChild(frame);
-                frame = null;
-              };
-            }, 500);
-          }
-          else if (eventName === 'userAuthorized') {
-
-            // store user token in extension's storage for use on reopen
-            var token = eventData;
-            console.log(eventName, eventData);
-            WL.storage.set('authToken', token);
-          }
-        };
-
-        // only listen for events when iframe is present
-        window.addEventListener('message', handleMessage, false);
-      });
+      // only listen for events when iframe is present
+      window.addEventListener('message', handleMessage, false);
     }
   }
 
   // exports
   WL.showOverlay = showOverlay;
-
 })(window.WL);

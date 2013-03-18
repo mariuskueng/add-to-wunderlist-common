@@ -116,23 +116,11 @@
       note = 'scraper:' + scrapeData.scraper + '\u2603' + note;
     }
 
-    // send any stored auth token
-    WL.storage.get('authToken').done(function (value) {
+    // encode
+    title = encodeURIComponent(title);
+    note = encodeURIComponent(note);
 
-      if (value) {
-
-        note = 'token:' + value + '\u2603' + note;
-      }
-
-      // encode
-      title = encodeURIComponent(title);
-      note = encodeURIComponent(note);
-
-      var builtUrl = config.host + '/#/extension/add/' + title + '/' + note;
-      deferred.resolveWith(this, [builtUrl]);
-    });
-
-    return deferred.promise();
+    return config.host + '/#/extension/add/' + title + '/' + note;
   }
 
   function buildCss (options) {
