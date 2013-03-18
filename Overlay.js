@@ -19,61 +19,82 @@
 
     if (!existing) {
 
-      var frame = document.createElement('iframe');
+      WL.buildUrl(postData).done(function (builtUrl) {
 
-      frame.allowtransparency = 'true';
-      frame.scrolling = 'no';
-      frame.id = overlayId;
-      frame.name = overlayId;
-      frame.style.cssText = WL.buildCss();
-      frame.src = WL.buildUrl(postData);
+        var frame = document.createElement('iframe');
 
-      frame.onload = function () {
+        frame.allowtransparency = 'true';
+        frame.scrolling = 'no';
+        frame.id = overlayId;
+        frame.name = overlayId;
+        frame.style.cssText = WL.buildCss();
+        frame.src = builtUrl;
 
-        $('body').css({
+        frame.onload = function () {
 
-          'overflow': 'hidden'
-        });
+          // deal with animations
+          $('body').css({
 
-        frame.style.opacity = 1;
-
-        setTimeout(function () {
-
-          frame.style.cssText = WL.buildCss({
-
-            'opacity': 1,
-            'transitionSpeed': 50
+            'overflow': 'hidden'
           });
-        }, 0);
-      };
 
-      document.body.appendChild(frame);
-
-      var close = function close (ev) {
-
-        if (ev.data === 'close_wunderlist') {
-
-          frame.style.opacity = 0;
+          frame.style.opacity = 1;
 
           setTimeout(function () {
 
-            frame.src = 'about:blank';
-            frame.onload = function () {
+            frame.style.cssText = WL.buildCss({
 
-              $('body').css({
+              'opacity': 1,
+              'transitionSpeed': 50
+            });
+          }, 0);
+        };
 
-                'overflow': ''
-              });
+        document.body.appendChild(frame);
 
-              window.removeEventListener('message', close, false);
-              frame.parentNode.removeChild(frame);
-              frame = null;
-            };
-          }, 500);
-        }
-      };
+        var handleMessage = function handleMessage (ev) {
 
-      window.addEventListener('message', close, false);
+          // split message into useful bits
+          // message should come in the format 'event:data'
+          var parts = ev.data.split(':');
+          var eventName = parts[0];
+          var eventData = parts[1];
+
+          // handle messages sent from iframe
+          if (eventName === 'close_wunderlist') {
+
+            frame.style.opacity = 0;
+
+            setTimeout(function () {
+
+              frame.src = 'about:blank';
+              frame.onload = function () {
+
+                $('body').css({
+
+                  'overflow': ''
+                });
+
+                // cleanup event
+                window.removeEventListener('message', handleMessage, false);
+                frame.parentNode.removeChild(frame);
+                frame = null;
+              };
+            }, 500);
+          }
+          else if (eventName === 'userAuthorized') {
+
+            // store user token in extension's storage for use on reopen
+            var token = eventData;
+            console.log(eventName, eventData);
+            WL.storage.set('authToken', token);
+          }
+        };
+
+        // only listen for events when iframe is present
+        window.addEventListener('message', handleMessage, false);
+
+      });
     }
   }
 

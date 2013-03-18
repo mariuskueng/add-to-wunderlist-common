@@ -7,7 +7,8 @@
 
   // common config
   var config = {
-    'host': 'https://www.wunderlist.com'
+    // 'host': 'https://www.wunderlist.com'
+    'host': 'http://web.dev.wunderlist.com:5000'
   };
 
   // modules can be imported individually for different extensions, but all will export onto window.WL
@@ -63,10 +64,13 @@
 
   function buildUrl (data) {
 
-    data = data || {};
-
     // Builds url for passing data to wunderlist.com extension frame.
     // Takes passes in data, or defaults to the tabs title and url or text selection in the frame
+    // returns promise!
+
+    data = data || {};
+
+    var deferred = new $.Deferred();
 
     // Scrape predefined data
     var scrapeData = WL.scrape(data);
@@ -112,11 +116,23 @@
       note = 'scraper:' + scrapeData.scraper + '\u2603' + note;
     }
 
-    // encode
-    title = encodeURIComponent(title);
-    note = encodeURIComponent(note);
+    // send any stored auth token
+    WL.storage.get('authToken').done(function (value) {
 
-    return config.host + '/#/extension/add/' + title + '/' + note;
+      if (value) {
+
+        note = 'token:' + value + '\u2603' + note;
+      }
+
+      // encode
+      title = encodeURIComponent(title);
+      note = encodeURIComponent(note);
+
+      var builtUrl = config.host + '/#/extension/add/' + title + '/' + note;
+      deferred.resolveWith(this, [builtUrl]);
+    });
+
+    return deferred.promise();
   }
 
   function buildCss (options) {
