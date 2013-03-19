@@ -30,21 +30,6 @@
 
       frame.onload = function () {
 
-        setTimeout(function ()  {
-
-          console.log('timeout');
-
-            // send any stored auth token
-            WL.storage.get('authToken').done(function (value) {
-
-              if (value) {
-
-                value = 'token:' + value;
-                frame.contentWindow.postMessage(value, '*');
-              }
-            });
-        }, 500);
-
         // deal with animations
         $('body').css({
 
@@ -65,49 +50,62 @@
 
       document.body.appendChild(frame);
 
-      var handleMessage = function handleMessage (ev) {
-
-        // split message into useful bits
-        // message should come in the format 'event:data'
-        var parts = ev.data.split(':');
-        var eventName = parts[0];
-        var eventData = parts[1];
-
-        // handle messages sent from iframe
-        if (eventName === 'close_wunderlist') {
-
-          frame.style.opacity = 0;
-
-          setTimeout(function () {
-
-            frame.src = 'about:blank';
-            frame.onload = function () {
-
-              $('body').css({
-
-                'overflow': ''
-              });
-
-              // cleanup event
-              window.removeEventListener('message', handleMessage, false);
-              frame.parentNode.removeChild(frame);
-              frame = null;
-            };
-          }, 500);
-        }
-        else if (eventName === 'userAuthorized') {
-
-          // store user token in extension's storage for use on reopen
-          var token = eventData;
-          console.log(eventName, eventData);
-          WL.storage.set('authToken', token);
-        }
-      };
-
       // only listen for events when iframe is present
       window.addEventListener('message', handleMessage, false);
     }
   }
+
+  var handleMessage = function handleMessage (ev) {
+
+    // split message into useful bits
+    // message should come in the format 'event:data'
+    var parts = ev.data.split(':');
+    var eventName = parts[0];
+    var eventData = parts[1];
+    var frame = $('#' + overlayId)[0];
+
+    // handle messages sent from iframe
+    if (eventName === 'close_wunderlist') {
+
+      frame.style.opacity = 0;
+
+      setTimeout(function () {
+
+        frame.src = 'about:blank';
+        frame.onload = function () {
+
+          $('body').css({
+
+            'overflow': ''
+          });
+
+          // cleanup event
+          window.removeEventListener('message', handleMessage, false);
+          frame.parentNode.removeChild(frame);
+          frame = null;
+        };
+      }, 500);
+    }
+    else if (eventName === 'userAuthorized') {
+
+      // store user token in extension's storage for use on reopen
+      var token = eventData;
+      console.log(eventName, eventData);
+      WL.storage.set('authToken', token);
+    }
+    else if (eventName === 'webappReady') {
+
+      // send any stored auth token to web app
+      WL.storage.get('authToken').done(function (value) {
+
+        if (value) {
+
+          value = 'token:' + value;
+          frame.contentWindow.postMessage(value, '*');
+        }
+      });
+    }
+  };
 
   // exports
   WL.showOverlay = showOverlay;
