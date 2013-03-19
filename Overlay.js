@@ -90,7 +90,6 @@
 
       // store user token in extension's storage for use on reopen
       var token = eventData;
-      console.log(eventName, eventData);
       WL.storage.set('authToken', token);
     }
     else if (eventName === 'webappReady') {
@@ -107,7 +106,6 @@
     }
     else if (eventName === 'logout') {
 
-      console.log('received logout event');
       WL.storage.remove('authToken');
     }
   };

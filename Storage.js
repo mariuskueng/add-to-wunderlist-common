@@ -46,11 +46,7 @@
   };
 
   // set storage module
-  console.log('browser', browser);
-
   storage = storages[browser].storage;
-
-  console.log('storage', storage);
 
   var localStorageInterface = {
 
@@ -112,7 +108,6 @@
 
     interfaces[browser].set(key, value, function () {
 
-      console.log('interfaces[browser].set', arguments);
       deferred.resolveWith(this, arguments);
     });
 
@@ -125,7 +120,6 @@
 
     interfaces[browser].get(key, function (value) {
 
-      console.log('interfaces[browser].get', arguments);
       deferred.resolveWith(this, arguments);
     });
 
@@ -138,7 +132,6 @@
 
     interfaces[browser].remove(key, function () {
 
-      console.log('interfaces[browser].remove', arguments);
       deferred.resolveWith(this, arguments);
     });
 
@@ -152,26 +145,5 @@
     'set': setter,
     'remove': remover
   };
-
-  // Tests (remove before release)
-  WL.storage.set("test", "test value").done(function () {
-
-    console.log('WL.storage.set.done', arguments);
-
-    WL.storage.get("test").done(function (value) {
-
-      console.log("WL.storage.get.done", value, arguments);
-    });
-
-    WL.storage.remove("test").done(function () {
-
-      console.log('removed', arguments);
-
-      WL.storage.get('test').done(function (value) {
-
-        console.log('WL.storage.get.done after remove: ', value);
-      });
-    });
-  });
 
 })(window.WL);
