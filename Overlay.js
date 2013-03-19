@@ -105,6 +105,11 @@
         }
       });
     }
+    else if (eventName === 'logout') {
+
+      console.log('received logout event');
+      WL.storage.remove('authToken');
+    }
   };
 
   // exports
