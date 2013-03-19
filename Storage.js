@@ -13,26 +13,34 @@
   }
 
   var browser, storage, setter, getter;
-  if (chrome) {
+  if ('chrome' in window) {
 
     browser = 'chrome';
+  }
+  else if ('safari' in window) {
+
+    browser = 'safari';
+  }
+  else if ('require' in window) {
+
+    browser = 'firefox';
   }
 
   var storages = {
 
     'chrome': {
 
-      'storage': chrome.storage.local
+      'storage': ('chrome' in window && chrome.storage.local)
     },
 
     'safari': {
 
-      'storage': window.localStorage
+      'storage': ('localStorage' in window && window.localStorage)
     },
 
     'firefox': {
 
-      //'storage': (require && require("simple-storage"))
+      'storage': ('require' in window && require('simple-storage'))
     }
   };
 
@@ -70,7 +78,7 @@
 
       'get': function (key, callback) {
 
-        callback(storage.getItem(key, value));
+        callback(storage.getItem(key));
       }
     },
 
@@ -96,7 +104,7 @@
     interfaces[browser].set(key, value, function () {
 
       console.log('interfaces[browser].set', arguments);
-      console.log('error', chrome.runtime.lastError);
+      // console.log('error', chrome.runtime.lastError);
       deferred.resolveWith(this, arguments);
     });
 
@@ -110,7 +118,7 @@
     interfaces[browser].get(key, function (value) {
 
       console.log('interfaces[browser].get', arguments);
-      console.log('error', chrome.runtime.lastError);
+      // console.log('error', chrome.runtime.lastError);
       deferred.resolveWith(this, arguments);
     });
 
@@ -125,14 +133,14 @@
   };
 
   // Test test
-  // WL.storage.set("test", "test value").done(function () {
+  WL.storage.set("test", "test value").done(function () {
 
-  //   console.log('WL.storage.set.done', arguments);
+    console.log('WL.storage.set.done', arguments);
 
-  //   WL.storage.get("test").done(function (value) {
+    WL.storage.get("test").done(function (value) {
 
-  //     console.log("WL.storage.get.done", arguments);
-  //   });
-  // });
+      console.log("WL.storage.get.done", arguments);
+    });
+  });
 
 })(window.WL);
