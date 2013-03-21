@@ -7,8 +7,8 @@
 
   // common config
   var config = {
-    // 'host': 'https://www.wunderlist.com'
-    'host': 'http://web.dev.wunderlist.com:5000'
+
+    'host': 'https://www.wunderlist.com'
   };
 
   // modules can be imported individually for different extensions, but all will export onto window.WL
