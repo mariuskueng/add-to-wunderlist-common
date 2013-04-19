@@ -120,6 +120,16 @@
   top:2px !important;
 }
 
+table.buyBox .wishlist td.bottomRight {
+
+  background-position: -419px -22px !important;
+}
+
+table.buyBox .wishlist td.bottomLeft {
+
+  background-position: left -22px !important;
+}
+
 /* IMDB */
 
 #addToWunderlistButton.imdb {
