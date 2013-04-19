@@ -147,6 +147,7 @@ table.buyBox .wishlist td.bottomLeft {
   padding:0 12px !important;
   margin: 15px 0 0 0 !important;
   float: left !important;
+  clear: both !important;
 }
 
 #addToWunderlistButton.imdb span.wunderlist-icon {
