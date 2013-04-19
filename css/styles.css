@@ -54,6 +54,17 @@
   position: absolute !important;
 }
 
+@media all and (max-width: 900px) {
+
+  #addToWunderlistButton.gmail {
+  
+    min-width: 0px;
+    text-indent: -9999px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
 /* OUTLOOK */
 
 #addToWunderlistButton.outlook span.wunderlist-icon {
