@@ -84,6 +84,9 @@
     var description = trim(openGraph.description || twitterCard.description || $('meta[name="description"]').attr('content') || '');
     var url = scrapeData.url || data.url || openGraph.url || twitterCard.url || $('link[rel="canonical"]').attr('href') || window.location.href;
 
+    // if the url does not remotely resemble a fully qualified url, or start with a domain, or some other gibberesh, use location.href
+    url = /^((.+)\:\/\/)?(.+(\.+).+)/.test(url) ? url : window.location.href;
+
     // start building note from passed in data
     // and make sure it doesn't exceed the max length
     var note = trim(data.note || scrapeData.note, 1000);
