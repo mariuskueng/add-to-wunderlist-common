@@ -145,6 +145,8 @@
       data.note = $noteSource.text();
       data.specialList = 'readLater';
 
+      data.note = data.note && data.note.replace(/\[\d+\]/g, '');
+
       return data;
     },
 
