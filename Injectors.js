@@ -181,8 +181,10 @@
 
   function asosQuickAdd () {
 
+    var isMarketplace = /marketplace\./.test(window.location.hostname);
+
     var $targetContainer = $($('#variants, .product-buttons').get(0));
-    var $button = generateGenericButton('asos button small grey', '<a/>');
+    var $button = generateGenericButton('asos button small grey' + (isMarketplace ? ' marketplace' : ''), '<a/>');
     $targetContainer.append($button);
 
     createGenericButtonBind();

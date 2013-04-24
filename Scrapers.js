@@ -169,21 +169,36 @@
       var data = {};
       var openGraph = WL.fetchOpenGraph();
 
+      var isMarketplace = /marketplace\./.test(window.location.hostname);
+
+      var mainDescription, careDescription, price;
+
       data.scraper = 'asos';
-
       data.title = openGraph.title;
+      data.url = openGraph.url;
 
-      var price = $.trim($('.product_price_details').text());
+      if (isMarketplace) {
+
+        price = $.trim($('.price-and-offer .price').text());
+
+        mainDescription = $('#description-panel').html();
+      }
+      else {
+
+        price = $.trim($('.product_price_details').text());
+
+        mainDescription = $('.product-description').html();
+        careDescription = $('#infoAndCare').html();
+      }
+
+      mainDescription = mainDescription && mainDescription.replace(/<br>/g, '\n').replace(/<(?:.|\n)*?>/gm, '');
+      careDescription = careDescription && careDescription.replace(/<br>/g, '\n').replace(/<(?:.|\n)*?>/gm, '');
+
       if (price) {
         data.title = data.title + ' (' + price + ')';
       }
+      data.note = $.trim(mainDescription + (careDescription ? '\n\n' + careDescription : ''));
 
-      data.url = openGraph.url;
-
-      var mainDescription = $('.product-description').html().replace(/<br>/g, '\n').replace(/<(?:.|\n)*?>/gm, '');
-      var careDescription = $('#infoAndCare').html().replace(/<br>/g, '\n').replace(/<(?:.|\n)*?>/gm, '');
-
-      data.note = $.trim(mainDescription + '\n\n' + careDescription);
       data.specialList = 'wishlist';
 
       return data;
