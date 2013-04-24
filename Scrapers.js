@@ -259,6 +259,19 @@
       data.url = window.location.protocol + '//' + window.location.host + $tweet.find('a.details').attr('href');
 
       return data;
+    },
+
+    'txt': function () {
+
+      var data = {};
+
+      data.title = window.location.href;
+      data.url = window.location.href;
+      data.note = document.childNodes[0].innerText || document.childNodes[0].textContent;
+
+      console.log('DDDAAAATTTAAA:', data);
+
+      return data;
     }
 	};
 
@@ -270,7 +283,11 @@
     var path = window.location.pathname;
     var search = window.location.search;
 
-    if (/mail\.google\.com/.test(host) && hash.split('/')[1]) {
+    if (/\.txt/.test(path)) {
+
+      return Scrapers.txt();
+    }
+    else if (/mail\.google\.com/.test(host) && hash.split('/')[1]) {
 
       return Scrapers.gmail();
     }
