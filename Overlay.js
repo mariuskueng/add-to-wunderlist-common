@@ -1,6 +1,6 @@
 (function (WL) {
 
-  if (window.top !== window.top) {
+  if (window.top !== window.top || /\.xml$/.test(window.location.pathname)) {
 
     return;
   }
