@@ -1,6 +1,6 @@
 (function (WL) {
 
-  if (window.top !== window.top) {
+  if (window.top !== window.top || /\.xml$/.test(window.location.pathname)) {
 
     return;
   }
@@ -154,7 +154,7 @@
 
   function youtubeQuickAdd () {
 
-    var $target = $('.yt-uix-button-subscription-container:visible');
+    var $target = $('.yt-uix-button-panel .yt-uix-button-subscription-container:visible');
     var $button = generateGenericButton('youtube yt-uix-button-subscribe-branded');
     $target.after($button);
 
@@ -181,8 +181,10 @@
 
   function asosQuickAdd () {
 
+    var isMarketplace = /marketplace\./.test(window.location.hostname);
+
     var $targetContainer = $($('#variants, .product-buttons').get(0));
-    var $button = generateGenericButton('asos button small grey', '<a/>');
+    var $button = generateGenericButton('asos button small grey' + (isMarketplace ? ' marketplace' : ''), '<a/>');
     $targetContainer.append($button);
 
     createGenericButtonBind();

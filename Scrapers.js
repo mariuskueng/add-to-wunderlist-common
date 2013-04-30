@@ -1,6 +1,6 @@
 (function (WL) {
 
-  if (window.top !== window.top) {
+  if (window.top !== window.top || /\.xml$/.test(window.location.pathname)) {
 
     return;
   }
@@ -145,6 +145,8 @@
       data.note = $noteSource.text();
       data.specialList = 'readLater';
 
+      data.note = data.note && data.note.replace(/\[\d+\]/g, '');
+
       return data;
     },
 
@@ -167,21 +169,36 @@
       var data = {};
       var openGraph = WL.fetchOpenGraph();
 
+      var isMarketplace = /marketplace\./.test(window.location.hostname);
+
+      var mainDescription, careDescription, price;
+
       data.scraper = 'asos';
-
       data.title = openGraph.title;
+      data.url = openGraph.url;
 
-      var price = $.trim($('.product_price_details').text());
+      if (isMarketplace) {
+
+        price = $.trim($('.price-and-offer .price').text());
+
+        mainDescription = $('#description-panel').html();
+      }
+      else {
+
+        price = $.trim($('.product_price_details').text());
+
+        mainDescription = $('.product-description').html();
+        careDescription = $('#infoAndCare').html();
+      }
+
+      mainDescription = mainDescription && mainDescription.replace(/<br>/g, '\n').replace(/<(?:.|\n)*?>/gm, '');
+      careDescription = careDescription && careDescription.replace(/<br>/g, '\n').replace(/<(?:.|\n)*?>/gm, '');
+
       if (price) {
         data.title = data.title + ' (' + price + ')';
       }
+      data.note = $.trim(mainDescription + (careDescription ? '\n\n' + careDescription : ''));
 
-      data.url = openGraph.url;
-
-      var mainDescription = $('.product-description').html().replace(/<br>/g, '\n').replace(/<(?:.|\n)*?>/gm, '');
-      var careDescription = $('#infoAndCare').html().replace(/<br>/g, '\n').replace(/<(?:.|\n)*?>/gm, '');
-
-      data.note = $.trim(mainDescription + '\n\n' + careDescription);
       data.specialList = 'wishlist';
 
       return data;
@@ -257,6 +274,19 @@
       data.url = window.location.protocol + '//' + window.location.host + $tweet.find('a.details').attr('href');
 
       return data;
+    },
+
+    'txt': function () {
+
+      var data = {};
+
+      data.title = window.location.href;
+      data.url = window.location.href;
+      data.note = document.childNodes[0].innerText || document.childNodes[0].textContent;
+
+      console.log('DDDAAAATTTAAA:', data);
+
+      return data;
     }
 	};
 
@@ -268,7 +298,11 @@
     var path = window.location.pathname;
     var search = window.location.search;
 
-    if (/mail\.google\.com/.test(host) && hash.split('/')[1]) {
+    if (/\.txt/.test(path)) {
+
+      return Scrapers.txt();
+    }
+    else if (/mail\.google\.com/.test(host) && hash.split('/')[1]) {
 
       return Scrapers.gmail();
     }

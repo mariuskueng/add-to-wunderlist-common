@@ -1,12 +1,13 @@
 (function (WL) {
 
-  if (window.top !== window.top) {
+  if (window.top !== window.top || /\.xml$/.test(window.location.pathname)) {
 
     return;
   }
 
   // common config
   var config = {
+
     'host': 'https://www.wunderlist.com'
   };
 
@@ -63,10 +64,13 @@
 
   function buildUrl (data) {
 
-    data = data || {};
-
     // Builds url for passing data to wunderlist.com extension frame.
     // Takes passes in data, or defaults to the tabs title and url or text selection in the frame
+    // returns promise!
+
+    data = data || {};
+
+    var deferred = new $.Deferred();
 
     // Scrape predefined data
     var scrapeData = WL.scrape(data);
@@ -79,6 +83,9 @@
     var title = scrapeData.title || data.title || openGraph.title || twitterCard.title || document.title || '';
     var description = trim(openGraph.description || twitterCard.description || $('meta[name="description"]').attr('content') || '');
     var url = scrapeData.url || data.url || openGraph.url || twitterCard.url || $('link[rel="canonical"]').attr('href') || window.location.href;
+
+    // if the url does not remotely resemble a fully qualified url, or start with a domain, or some other gibberesh, use location.href
+    url = /^((.+)\:\/\/)?(.+(\.+).+)/.test(url) ? url : window.location.href;
 
     // start building note from passed in data
     // and make sure it doesn't exceed the max length
