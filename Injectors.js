@@ -303,7 +303,8 @@
 
       ebayQuickAdd();
     }
-    else if (/\.asos\./.test(host)) {
+    // Asos has internal product pages with a set of products, where we shouldn't inject any button - example at http://www.asos.de/Asos/Asos-Slim-Fit-Tuxedo-Suit-Trousers/Prod/pgeproduct.aspx?iid=2431324&abi=1&clr=black&sgid=5337&r=2
+    else if (/\.asos\./.test(host) && !(/\/Asos\//).test(path)) {
 
       asosQuickAdd();
     }
