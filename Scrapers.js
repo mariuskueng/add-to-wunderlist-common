@@ -52,9 +52,9 @@
       var data = {};
 
       data.scraper = 'outlook';
-      data.title = $('.ReadMsgSubject').text();
+      data.title = $('.ReadMsgSubject').not('style, textarea').text();
       data.url = 'none';
-      data.note = $('.ReadMsgBody').text();
+      data.note = $('.ReadMsgBody *').not('style, textarea, .ExternalClass').text();
 
       return data;
     },
