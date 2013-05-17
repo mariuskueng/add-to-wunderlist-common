@@ -287,7 +287,26 @@
       console.log('DDDAAAATTTAAA:', data);
 
       return data;
-    }
+    },
+    
+    
+   "yelp": function () {
+   	
+ 
+  	
+   	var data = {};
+   	
+   	//build note
+   	var note = "";
+   	var address= $("#BizInfoContent address").text();
+   	
+   	data.title = $("#BizInfoHeader h1").text();
+   	//data.title = "Yam Yam"
+   	
+   	return data;
+   	
+   }
+    
 	};
 
   // scrape something based on the current url
@@ -353,6 +372,10 @@
     else if (/twitter\.com/.test(host)) {
 
         return Scrapers.twitterIndex(data.scraperTarget);
+    }
+    else if (/\.yelp\./.test(host)) {
+
+      return Scrapers.yelp();
     }
 
     // return something as nothing
