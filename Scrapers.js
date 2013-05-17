@@ -298,10 +298,23 @@
    	
    	//build note
    	var note = "";
-   	var address= $("#BizInfoContent address").text();
    	
-   	data.title = $("#BizInfoHeader h1").text();
+   	var address= $("#bizInfoContent address").text();
+   	var addressURL = "https://maps.google.com/maps?z16&q=" + document.encodeURIComponent(address);
+   	note +=addressURL;
+   	note += "\n\n";
+   	
+   	
+   	note += $("#bizPhone").text();
+   	
+   	note += $("#bizUrl a").text();
+   	
+   	data.title = $("#bizInfoHeader h1").text();
    	//data.title = "Yam Yam"
+   	
+   	data.note = note;
+   	data.scraper = 'yelp';
+   	data.url = window.location.href;
    	
    	return data;
    	
