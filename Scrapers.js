@@ -288,39 +288,29 @@
 
       return data;
     },
-    
-    
-   "yelp": function () {
-   	
- 
-  	
-   	var data = {};
-   	
-   	//build note
-   	var note = "";
-   	
-   	var address= $("#bizInfoContent address").text();
-   	var addressURL = "https://maps.google.com/maps?z16&q=" + document.encodeURIComponent(address);
-   	note +=addressURL;
-   	note += "\n\n";
-   	
-   	
-   	note += $("#bizPhone").text();
-   	
-   	note += $("#bizUrl a").text();
-   	
-   	data.title = $("#bizInfoHeader h1").text();
-   	//data.title = "Yam Yam"
-   	
-   	data.note = note;
-   	data.scraper = 'yelp';
-   	data.url = window.location.href;
-   	
-   	return data;
-   	
-   }
-    
-	};
+
+   'yelp': function () {
+
+      var data = {};
+      var note = '';
+      var address = $('#bizInfoContent address').text();
+      var addressURL = 'https://maps.google.com/maps?z16&q=' + encodeURIComponent(address);
+
+      note += addressURL;
+      note += "\n\n";
+      note += $("#bizPhone").text();
+      note += $("#bizUrl a").text();
+
+      data.title = $("#bizInfoHeader h1").text();
+
+      data.note = note;
+      data.scraper = 'yelp';
+      data.url = window.location.href;
+
+      return data;
+
+    }
+  };
 
   // scrape something based on the current url
   function scrape (data) {

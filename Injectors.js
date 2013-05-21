@@ -251,16 +251,15 @@
     // we need to keep on checking and re-adding buttons
     window.setTimeout(twitterIndexQuickAdd, 1000);
   }
+
   function yelpQuickAdd (){
-    
-    var $targetContainer = $('#secondary-actions');
-    var $button = generateGenericButton('ybtn ybtn-tertiary ybtn-small');
+
+    var $targetContainer = $('#bizActions');
+    var $button = generateGenericButton('injected-yelp ybtn ybtn-tertiary ybtn-small');
     $targetContainer.prepend($button);
 
     createGenericButtonBind();
-    
   }
-  
 
   function injectQuickAddLink () {
 
@@ -335,8 +334,9 @@
       twitterIndexQuickAdd();
     }
     else if (/yelp\./.test(host)) {
-      
+
       yelpQuickAdd();
+    }
   }
 
   var lastLocation = window.location.hostname + window.location.pathname + window.location.search + window.location.hash;
