@@ -27,6 +27,8 @@
     browser = 'firefox';
   }
 
+  WL.browser = browser;
+
   var storages = {
 
     'chrome': {

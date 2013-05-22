@@ -20,6 +20,7 @@
     element = element || '<div/>';
 
     var $button = $(element).addClass(className)
+      .addClass(WL.browser)
       .attr('id', buttonId)
       .text(addString);
 

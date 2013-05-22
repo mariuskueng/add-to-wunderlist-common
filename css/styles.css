@@ -302,9 +302,9 @@ table.buyBox .wishlist td.bottomLeft {
 /* YELP */
 
 #addToWunderlistButton.injected-yelp {
-  margin: 2px 0 0 4px;
+  margin: 2px 0 0 4px !important;
 }
 
 #addToWunderlistButton.injected-yelp .wunderlist-icon {
-  margin: -1px 5px -4px -5px;
+  margin: -1px 5px -4px -5px !important;
 }
