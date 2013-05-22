@@ -296,7 +296,7 @@
       var address = '';
       $('#bizInfoContent address *').each(function (index, element) {
 
-        var text = element.innerText;
+        var text = $(element).text();
 
         if (text) {
 
@@ -332,15 +332,15 @@
 
       // find the description
       $('head meta').each(function (index, element) {
-        if (element.getAttribute('property') === 'og:description') {
-          data.title += ' - ' + element.content;
+        if ($(element).attr('property') === 'og:description') {
+          data.title += ' - ' + $(element).attr('content');
         }
       });
 
       // find the rating
       $('#bizRating .rating meta').each(function (index, element) {
-        if (element.getAttribute('itemprop') === 'ratingValue') {
-          data.title += ' [' + element.content + ']';
+        if ($(element).attr('itemprop') === 'ratingValue') {
+          data.title += ' [' + $(element).attr('content') + ']';
         }
       });
 
