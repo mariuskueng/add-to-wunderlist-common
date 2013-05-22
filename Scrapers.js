@@ -284,8 +284,6 @@
       data.url = window.location.href;
       data.note = document.childNodes[0].innerText || document.childNodes[0].textContent;
 
-      console.log('DDDAAAATTTAAA:', data);
-
       return data;
     },
 
@@ -293,22 +291,64 @@
 
       var data = {};
       var note = '';
-      var address = $('#bizInfoContent address').text();
-      var addressURL = 'https://maps.google.com/maps?z16&q=' + encodeURIComponent(address);
 
-      note += addressURL;
-      note += "\n\n";
-      note += $("#bizPhone").text();
-      note += $("#bizUrl a").text();
+      // build the address url
+      var address = '';
+      $('#bizInfoContent address *').each(function (index, element) {
 
-      data.title = $("#bizInfoHeader h1").text();
+        var text = element.innerText;
 
-      data.note = note;
+        if (text) {
+
+          if (address) {
+            address += ', ';
+          }
+
+          address += text;
+        }
+      });
+
+      if (address) {
+        note += 'https://maps.google.com/maps?z16&q=' + encodeURIComponent(address) + '\n';
+      }
+
+      // add the phone number
+      var phone = $('#bizPhone').text();
+
+      if (phone) {
+
+        note += phone + '\n';
+      }
+
+      // add the business' url
+      var bizUrl = $('#bizUrl a').text();
+
+      if (bizUrl) {
+
+        note += bizUrl + '\n';
+      }
+
+      data.title = $('#bizInfoHeader h1').text();
+
+      // find the description
+      $('head meta').each(function (index, element) {
+        if (element.getAttribute('property') === 'og:description') {
+          data.title += ' - ' + element.content;
+        }
+      });
+
+      // find the rating
+      $('#bizRating .rating meta').each(function (index, element) {
+        if (element.getAttribute('itemprop') === 'ratingValue') {
+          data.title += ' [' + element.content + ']';
+        }
+      });
+
+      data.note = note + '\n';
       data.scraper = 'yelp';
       data.url = window.location.href;
 
       return data;
-
     }
   };
 
