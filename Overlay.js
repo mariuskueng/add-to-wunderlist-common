@@ -30,12 +30,6 @@
 
       frame.onload = function () {
 
-        // deal with animations
-        $('body').css({
-
-          'overflow': 'hidden'
-        });
-
         frame.style.opacity = 1;
 
         setTimeout(function () {

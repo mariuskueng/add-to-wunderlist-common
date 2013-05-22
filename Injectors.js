@@ -252,6 +252,15 @@
     window.setTimeout(twitterIndexQuickAdd, 1000);
   }
 
+  function yelpQuickAdd (){
+
+    var $targetContainer = $('#bizActions');
+    var $button = generateGenericButton('injected-yelp ybtn ybtn-tertiary ybtn-small');
+    $targetContainer.prepend($button);
+
+    createGenericButtonBind();
+  }
+
   function injectQuickAddLink () {
 
     var hash = window.location.hash;
@@ -323,6 +332,10 @@
     else if (/twitter\.com/.test(host)) {
 
       twitterIndexQuickAdd();
+    }
+    else if (/yelp\.com/.test(host)) {
+
+      yelpQuickAdd();
     }
   }
 
