@@ -333,7 +333,7 @@
 
       twitterIndexQuickAdd();
     }
-    else if (/yelp\./.test(host)) {
+    else if (/yelp\.com/.test(host)) {
 
       yelpQuickAdd();
     }

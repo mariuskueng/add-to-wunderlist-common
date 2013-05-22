@@ -416,7 +416,7 @@
 
         return Scrapers.twitterIndex(data.scraperTarget);
     }
-    else if (/\.yelp\./.test(host)) {
+    else if (/\.yelp\.com/.test(host)) {
 
       return Scrapers.yelp();
     }
