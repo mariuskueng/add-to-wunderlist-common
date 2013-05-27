@@ -262,9 +262,20 @@
     createGenericButtonBind();
   }
 
-  function tripadvisorQuickAdd () {
+  function tripadvisorQuickAdd (attempt) {
 
     var $existingButton = $('.savesWrap');
+
+    attempt = attempt || 0;
+
+    if (!$existingButton.length && attempt < 10) {
+
+      attempt++;
+
+      return setTimeout(function () {
+        tripadvisorQuickAdd(attempt);
+      }, 250);
+    }
 
     var $button = $existingButton.clone();
     $button.attr('id', buttonId).addClass('tripadvisor');
