@@ -383,6 +383,7 @@
       data.note = note;
       data.scraper = 'tripadvisor';
       data.url = window.location.href;
+      data.specialList = 'wishlist';
 
       return data;
     }
