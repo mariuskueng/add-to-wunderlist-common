@@ -262,6 +262,23 @@
     createGenericButtonBind();
   }
 
+  function tripadvisorQuickAdd () {
+
+    var $existingButton = $('.savesWrap');
+
+    var $button = $existingButton.clone();
+    $button.attr('id', buttonId).addClass('tripadvisor');
+
+    // clean the cloned button
+    $button.find('.saves-hover-txt-saved, .saveAlert, .saveOptions, .sprite-suitcase_white').remove();
+
+    $button.find('.saves-hover-txt').text(addString);
+
+    $existingButton.after($button);
+
+    createGenericButtonBind();
+  }
+
   function injectQuickAddLink () {
 
     var hash = window.location.hash;
@@ -337,6 +354,10 @@
     else if (/yelp\.com/.test(host)) {
 
       yelpQuickAdd();
+    }
+    else if (/tripadvisor\./.test(host)) {
+
+      tripadvisorQuickAdd();
     }
   }
 

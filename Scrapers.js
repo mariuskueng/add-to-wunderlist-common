@@ -296,7 +296,7 @@
       var address = '';
       $('#bizInfoContent address *').each(function (index, element) {
 
-        var text = $(element).text();
+        var text = $.trim($(element).text());
 
         if (text) {
 
@@ -313,7 +313,7 @@
       }
 
       // add the phone number
-      var phone = $('#bizPhone').text();
+      var phone = $.trim($('#bizPhone').text());
 
       if (phone) {
 
@@ -321,14 +321,14 @@
       }
 
       // add the business' url
-      var bizUrl = $('#bizUrl a').text();
+      var bizUrl = $.trim($('#bizUrl a').text());
 
       if (bizUrl) {
 
         note += bizUrl + '\n';
       }
 
-      data.title = $('#bizInfoHeader h1').text();
+      data.title = $.trim($('#bizInfoHeader h1').text());
 
       // find the description
       $('head meta').each(function (index, element) {
@@ -346,6 +346,42 @@
 
       data.note = note + '\n';
       data.scraper = 'yelp';
+      data.url = window.location.href;
+
+      return data;
+    },
+
+    'tripadvisor': function () {
+
+      var data = {};
+
+      data.title = $.trim($('h1').first().text());
+      var replaceTitle = data.title + ':';
+
+      var note = $.trim($('meta[name="description"]').attr('content').replace(replaceTitle, '')) + '\n\n';
+
+      // build the address url
+      var address = '';
+      $('.infoBox address *').each(function (index, element) {
+
+        var text = $.trim($(element).text());
+
+        if (text && address.indexOf(text) < 0) {
+
+          if (address) {
+            address += ', ';
+          }
+
+          address += text;
+        }
+      });
+
+      if (address) {
+        note += 'https://maps.google.com/maps?z16&q=' + encodeURIComponent(address) + '\n';
+      }
+
+      data.note = note;
+      data.scraper = 'tripadvisor';
       data.url = window.location.href;
 
       return data;
@@ -419,6 +455,10 @@
     else if (/\.yelp\.com/.test(host)) {
 
       return Scrapers.yelp();
+    }
+    else if (/tripadvisor\./.test(host)) {
+
+      return Scrapers.tripadvisor();
     }
 
     // return something as nothing

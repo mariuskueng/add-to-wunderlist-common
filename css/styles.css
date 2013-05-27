@@ -312,3 +312,24 @@ table.buyBox .wishlist td.bottomLeft {
 #addToWunderlistButton.injected-yelp .wunderlist-icon {
   margin: -1px 5px -4px -5px !important;
 }
+
+/* TRIPADVISOR */
+
+#addToWunderlistButton.tripadvisor {
+  top: 25px !important;
+}
+
+#addToWunderlistButton.tripadvisor .savesHover > span {
+  background-color: #AAA !important;
+  border: 1px solid #888 !important;
+}
+
+#addToWunderlistButton.tripadvisor .savesHover .gradient {
+  background-image: none !important;
+}
+
+#addToWunderlistButton.tripadvisor .saves-hover-txt {
+  text-shadow: 1px 1px 0 #888 !important;
+  padding-left: 7px !important;
+  margin-top: 3px !important;
+}
