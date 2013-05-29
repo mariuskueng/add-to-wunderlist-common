@@ -31,6 +31,7 @@
 /* GMAIL */
 
 #addToWunderlistButton.gmail {
+  vertical-align:top;
   padding-right: 14px !important;
   padding-left: 35px !important;
 }
