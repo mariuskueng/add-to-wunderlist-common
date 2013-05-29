@@ -256,7 +256,7 @@ table.buyBox .wishlist td.bottomLeft {
 
 /* WIKIPEDIA */
 
-#addToWunderlistButton.wikipedia {
+#addToWunderlistButton.wkpedia {
   display: inline-block !important;
   position:relative !important;
   font-size: 12px !important;
@@ -266,7 +266,7 @@ table.buyBox .wishlist td.bottomLeft {
   border-left: 1px solid #aaa !important;
 }
 
-#addToWunderlistButton.wikipedia span.wunderlist-icon {
+#addToWunderlistButton.wkpedia span.wunderlist-icon {
   position:absolute !important;
   left:10px !important;
   top:6px !important;

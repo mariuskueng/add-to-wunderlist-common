@@ -165,7 +165,7 @@
   function wikipediaQuickAdd () {
 
     var $target = $('.firstHeading span');
-    var $button = generateGenericButton('wikipedia');
+    var $button = generateGenericButton('wkpedia');
     $target.after($button);
 
     createGenericButtonBind();
