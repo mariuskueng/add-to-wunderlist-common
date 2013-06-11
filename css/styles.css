@@ -334,3 +334,19 @@ table.buyBox .wishlist td.bottomLeft {
   padding-left: 7px !important;
   margin-top: 2px !important;
 }
+
+/* SVPPLY */
+
+
+#addToWunderlistButton.sv_button .wunderlist-icon{
+  display:none !important;
+}
+#addToWunderlistButton.svpply-wunderlist-startpage{
+  -moz-border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  border-radius: 0 !important;
+}
+#addToWunderlistButton.svpply-wunderlist-startpage .wunderlist-icon{
+  display:none !important;
+}
+

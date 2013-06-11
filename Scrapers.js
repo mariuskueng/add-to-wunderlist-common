@@ -386,6 +386,31 @@
       data.specialList = 'wishlist';
 
       return data;
+    },
+
+    'svpplyIndex': function(){
+
+      var data = {};
+
+      $item = $('.model.wunderlist');
+      data.title = $item.find('#price_and_wants .title').html() + ' (' + $item.find('#price_and_wants .price').html() + ')';
+      data.url = window.location.href.toString().replace(/\/$/, "") + $item.find('.image a').attr('href');
+      data.note = $item.find('.user').text() + ' ' + $item.find('.store').text();
+      data.scraper = 'svpply';
+      data.specialList = 'wishlist';
+
+      return data;
+    },
+
+
+    'svpplyItem': function(){
+
+      var data = {};
+
+      data.scraper = 'svpply';
+      data.specialList = 'wishlist';
+
+      return data;
     }
   };
 
@@ -460,6 +485,12 @@
     else if (/tripadvisor\./.test(host)) {
 
       return Scrapers.tripadvisor();
+    }
+    else if (/svpply\./.test(host) && path.indexOf("item") >= 0) {
+      return Scrapers.svpplyItem();
+    }
+    else if (/svpply\./.test(host)) {
+      return Scrapers.svpplyIndex();
     }
 
     // return something as nothing

@@ -290,6 +290,37 @@
     createGenericButtonBind();
   }
 
+  function svpplyQuickAdd(){
+
+    function detailpageButton(){
+      var $targetContainer = $('.model>.menu');
+      var $button = generateGenericButton('sv_button rounded red fixed hover');
+
+      $targetContainer.append($button);
+      createGenericButtonBind();
+    }
+
+    function startpageButton(){
+
+      $('#content').bind('DOMNodeInserted', function(){
+          var $itemId = $(event.target).data('id');
+          if ($itemId) {
+            $('.model.wunderlist').removeClass('wunderlist');
+            var $model = $('.model[data-id=' + $itemId + ']');
+            $model.addClass('wunderlist');
+          }
+          var $targetContainer = $(event.target).find('.btn-group');
+          var $button = generateGenericButton('btn-want left hover svpply-wunderlist-startpage');
+          $targetContainer.children('.btn-want').after($button);
+          createGenericButtonBind();
+      });
+    }
+
+    detailpageButton();
+    startpageButton();
+
+  }
+
   function injectQuickAddLink () {
 
     var hash = window.location.hash;
@@ -369,6 +400,10 @@
     else if (/tripadvisor\./.test(host)) {
 
       tripadvisorQuickAdd();
+    }
+    else if (/svpply\./.test(host)) {
+
+      svpplyQuickAdd();
     }
   }
 
